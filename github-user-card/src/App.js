@@ -27,7 +27,6 @@ componentDidMount() {
       <header className="card header">
         <div className="card">
           <img className="card-img" src={this.state.githubuser.avatar_url} alt="avatar"></img>
-        
           <h3  className="name">
           {this.state.githubuser.name}
           <p className="username">User Name: {this.state.githubuser.login}</p>

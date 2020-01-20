@@ -5,23 +5,32 @@ class App extends Component {
   constructor() {
     super();
       this.state = {
-        githubuser: []
+        githubuser: [],
+        githubfollower: []
   }
 }
 
 componentDidMount() {
     fetch("https://api.github.com/users/rrawla2")
     .then(response => response.json())
-    .then(users => {
-      console.log("kg: fetch: users", users)
+    .then(users => {console.log("Users", users)
       this.setState({ ...this.state, githubuser: users})
     })
     .catch(err => console.log("Error on Fetch: ", err))
-  
+
+    fetch("https://api.github.com/users/rrawla2/followers")
+    .then(response => response.json())
+    .then(followers => {console.log("Follower", followers)
+      this.setState({ ...this.state, githubfollower:  followers})
+      this.state.githubfollower.map(follower => 
+      fetch(`https://api.github.com/users/${follower.name}`))
+    })
+    .catch(err => console.log("Error on Fetch: ", err))
 }
 
+
   render() {
-    console.log("kg: render")
+    console.log("render")
   return (
     <div className="container">
       <header className="card header">
@@ -36,10 +45,25 @@ componentDidMount() {
           <p>Following: {this.state.githubuser.following}</p>
           <p>Bio: {this.state.githubuser.bio}</p>
           </h3>
+        
+        </div>
+      </header> 
+    
+    <header className="card header">
+      {this.state.githubfollower.map(follower => 
+      <div className="card">
+          <img className="card-img" src={follower.avatar_url} alt="avatar"></img>
+          <h3  className="name">
+          <p className="username">User Name: {follower.login}</p>
+          <p>Repository: {follower.html_url}</p>
+
+          </h3>
 
       </div>
+      )} 
       </header>
     </div>
+
   );//return
 }//render
 }//App
